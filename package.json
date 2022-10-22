@@ -1,0 +1,23 @@
+{
+  "name": "todolist",
+  "version": "1.0.0",
+  "description": "A To do List",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CrypticAgro/ToDoList.git"
+  },
+  "author": "Jtech",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CrypticAgro/ToDoList/issues"
+  },
+  "homepage": "https://github.com/CrypticAgro/ToDoList#readme",
+  "devDependencies": {
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0"
+  }
+}
