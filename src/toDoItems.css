@@ -1,3 +1,21 @@
-#bob{
-    background-color: rebeccapurple;
+#container{
+    display: flex;
+    background-color: #d63b3f;
+    align-items: center;
+    gap: 20px;
+    width: 50vw;
+}
+#title{
+    color: white;
+}
+#due-date{
+    color: white;
+    cursor: pointer;
+}
+#subcontainer{
+    display: flex;
+    flex: 1;
+    justify-content: end;
+    gap: 20px;
+    padding-right: 15px;
 }

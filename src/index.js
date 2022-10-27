@@ -1,8 +1,13 @@
 import { toDoItem } from "./toDoItems";
+import { project } from "./projects";
 
-let task = document.getElementById("tasks");
+const task = project();
+const thing = toDoItem("wassaauasssdp", "wassup","important");
+const thing2 = toDoItem("wassaassssasdup","wassup","important");
 
-const thing = toDoItem("wassup","wassup this is a description of my item","wassup","important");
-const thing2 = toDoItem("wassup","wassup this is a description of my item","wassup","important");
-task.appendChild(thing.div);
-task.appendChild(thing2.div);
+let ate = project();
+ate.addToList(thing);
+ate.addToList(thing2);
+document.getElementById("modules").appendChild(ate.divProject);
+
+ate.removeFromList(thing2)

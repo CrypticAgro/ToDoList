@@ -1,13 +1,18 @@
 import "./toDoItems.css";
 import {format, parseISO } from 'date-fns'
 
-export const toDoItem = (title, description, dueDate, priority) => {
+export const toDoItem = (title, dueDate, priority) => {
     let div = document.createElement("div");
-    let divTitle = document.createElement("h3");
+    let divTitle = document.createElement("h2");
     let divDueDate = document.createElement("div");
     let divPriority = document.createElement("div");
-    let divDescription = document.createElement("div");
     let divGetDueDate = document.createElement("input");
+    let divSubContainer = document.createElement("div");
+
+    divDueDate.id = "due-date";
+    div.id = "container";
+    divTitle.id = "title";
+    divSubContainer.id = "subcontainer";
 
     const getTheDate = () => {
         let placeholder = parseISO(divGetDueDate.value);
@@ -27,14 +32,13 @@ export const toDoItem = (title, description, dueDate, priority) => {
 
     divGetDueDate.type = "date";
     divTitle.innerText = title;
-    divDueDate.innerText = "placeholder";
+    divDueDate.innerText = "select date";
     divPriority.innerText = priority;
-    divDescription.innerText = description;
 
     div.appendChild(divTitle);
-    div.appendChild(divDescription);
-    div.appendChild(divDueDate);
-    div.appendChild(divPriority);
+    div.appendChild(divSubContainer);
+    divSubContainer.appendChild(divDueDate);
+    divSubContainer.appendChild(divPriority);
 
-    return{title, description, dueDate, priority, div};
+    return{title, dueDate, priority, div};
 }
