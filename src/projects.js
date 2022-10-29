@@ -1,20 +1,31 @@
 import "./project.css";
+import { format } from "date-fns";
 
-export const project = () => {
-    let projectList = [];
-    let divProject = document.createElement("div");
-
-    divProject.id = "project";
-
+export const project = (name) => {
     const addToList = (itemToAdd) => {
-        projectList.push(itemToAdd);
+        toDoList.push(itemToAdd);
         divProject.appendChild(itemToAdd.div)
     }
+    
     const removeFromList = (itemToRemove) => {
         let title = itemToRemove.title
-        let remove = projectList.findIndex(itemToRemove => title == itemToRemove.title);
-        projectList.splice(remove, 1);
+        let remove = toDoList.findIndex(itemToRemove => title == itemToRemove.title);
+        toDoList.splice(remove, 1);
         divProject.removeChild(itemToRemove.div);
     }
-    return{ addToList, removeFromList, divProject };
+    
+    let toDoList = [];
+
+    let divProject = document.createElement("div");
+    let divAdd = document.createElement("div");
+    const ProjectName = document.createElement("div");
+    ProjectName.innerText = name;
+    ProjectName.className = "project-names";
+
+    divAdd.id = "project-add";
+    divProject.id = "project";
+
+    divProject.appendChild(divAdd);
+
+    return{ addToList, removeFromList, divProject, ProjectName };
 }

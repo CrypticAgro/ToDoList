@@ -1,0 +1,44 @@
+#task-form{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    height: 300px;
+    background-color: #d63b3f;
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+#task-form > input{
+    border: none;
+}
+
+#form-header{
+    width: 10vw;
+    font-size: 24px;
+}
+#form-description{
+    font-size: 16px;
+    border: none;
+}
+#form-due-date{
+    width: 150px;
+    border: none;
+    height: 20px;
+}
+#form-priority{
+    width: 150px;
+    border: none;
+    height: 20px;
+}
+#form-submit{
+    width: 100px;
+    height: 25px;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+}
