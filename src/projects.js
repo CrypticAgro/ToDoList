@@ -19,7 +19,7 @@ export const project = (name) => {
 
     let divProject = document.createElement("div");
     let divAdd = document.createElement("div");
-    const ProjectName = document.createElement("div");
+    let ProjectName = document.createElement("div");
     ProjectName.innerText = name;
     ProjectName.className = "project-names";
 
@@ -34,5 +34,25 @@ export const project = (name) => {
 
     divProject.appendChild(divAdd);
 
-    return{ addToList, removeFromList, divProject, ProjectName, toDoList, name, deleteButton };
+    const reInitialize = () => {
+        divProject = document.createElement("div");
+        divAdd = document.createElement("div");
+        ProjectName = document.createElement("div");
+        ProjectName.innerText = name;
+        ProjectName.className = "project-names";
+    
+        deleteButton = document.createElement("div")
+    
+        deleteButton.innerText = "remove";
+        deleteButton.id = "project-delete-button";
+        deleteButton.addEventListener("click", (e) => removeItem("project", e));
+    
+        divAdd.id = "project-add";
+        divProject.id = "project";
+    
+        divProject.appendChild(divAdd);
+    
+    }
+
+    return{ addToList, removeFromList, divProject, ProjectName, toDoList, name, deleteButton, reInitialize };
 }
