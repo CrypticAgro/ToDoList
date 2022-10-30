@@ -27,5 +27,5 @@ export const project = (name) => {
 
     divProject.appendChild(divAdd);
 
-    return{ addToList, removeFromList, divProject, ProjectName };
+    return{ addToList, removeFromList, divProject, ProjectName, toDoList, name };
 }

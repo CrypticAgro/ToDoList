@@ -1,9 +1,10 @@
-import { addTheItems } from '.';
+import { addTheItems, currentProject, projectList } from '.';
 import './projectForm.css';
 import { project } from './projects';
 import { taskForm } from './taskForm';
 export const projectForm = () => {
     let tempProject;
+
 
     let body = document.getElementById("body")
     let projectForm = document.createElement("form");
@@ -49,11 +50,19 @@ export const projectForm = () => {
     
     projectForm.addEventListener("submit", (e) => {
         e.preventDefault()
+        let detector;
+        if(projectList.length != 0){
+            detector = projectList.findIndex(x => x.name == projectName.value);
+        }
+
+
         tempProject = project(projectName.value);
-        if(false == true){
-            
+
+        if(detector != -1 && projectList.length != 0){
+            alert("No duplicate projects")
         }
         else{
+        tempProject = project(projectName.value);
         body.removeChild(projectForm);
         addTheItems(tempProject, "project");
         }

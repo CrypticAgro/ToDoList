@@ -13,13 +13,13 @@
 #project-button-adder{
     position: absolute;
     top: 87%;
-    left: 2.5%;
+    justify-content: center;
     background-color: #d63b3f;
     border: none;
-    border-radius: 50px;
+    border-radius: 100px;
     color: white;
-    width: 5%;
-    height: 10%;
+    width: 100px;
+    height: 100px;
     cursor: pointer;
     font-weight: bold;
     font-size: 300%;

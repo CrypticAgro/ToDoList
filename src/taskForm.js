@@ -69,8 +69,18 @@ export const taskForm = (task) => {
 
     const collectData = (e) => {
         e.preventDefault();
+        let toDo = currentProject.toDoList;
+        let detector;
+
+        if(toDo.length != 0){
+            detector = toDo.findIndex(x => x.title == headerDiv.value);
+        }
+
         if(currentProject == today || currentProject == week){
-            alert("you cannot add to this project")
+            alert("you cannot add to this project");
+        }
+        else if(detector != -1 && toDo.length != 0){
+            alert("you cannot have duplicate names");
         }
         else{
             header = headerDiv.value;

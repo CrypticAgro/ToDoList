@@ -1,23 +1,24 @@
 import { project } from "./projects";
 import { taskForm } from "./taskForm";
 import { projectForm } from "./projectForm";
-import { addToInbox, addToToday, addToWeek } from "./dateCheck";
-import { toDoItem } from "./toDoItems";
+import { addToToday, addToWeek } from "./dateCheck";
+import { toDoItem, makeDuplicatedTrue } from "./toDoItems";
 
 const projectList = [];
 const sidebar = document.getElementById("sidebar");
 const modules = document.getElementById("modules");
-let inbox = project("Inbox");
 let today = project("Today");
-let week = project("Week");
+let week = project("This week");
 
-inbox.ProjectName.addEventListener("click", () => changeCurrentProject(inbox));
+projectList.push(today);
+projectList.push(week);
+
 today.ProjectName.addEventListener("click", () => changeCurrentProject(today));
 week.ProjectName.addEventListener("click", () => changeCurrentProject(week));
 
 let topSidebarDiv = document.createElement("div");
 let addDivButton = document.createElement("button");
-let currentProject = inbox;
+let currentProject = today;
 
 let bottomSidebarDivTitle = document.createElement("div");
 let bottomSidebarDiv = document.createElement("div");
@@ -26,7 +27,6 @@ bottomSidebarDivTitle.innerText = "Projects";
 
 currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
 
-topSidebarDiv.appendChild(inbox.ProjectName);
 topSidebarDiv.appendChild(today.ProjectName);
 topSidebarDiv.appendChild(week.ProjectName);
 
@@ -39,20 +39,27 @@ topSidebarDiv.id = "top-side-bar";
 bottomSidebarDiv.id = "bottom-side-bar";
 bottomSidebarDivTitle.id = "bottom-side-bar-title";
 
+const getProjectForm = () => {
+    document.getElementById("project-button-adder").removeEventListener("click", getProjectForm);
+    projectForm();
+}
 addDivButton.innerText = "+";
-addDivButton.addEventListener("click", () => projectForm());
+addDivButton.addEventListener("click", getProjectForm);
 addDivButton.id = "project-button-adder";
 sidebar.appendChild(addDivButton);
 
 const changeCurrentProject = (item) => {
+    if (currentProject.divProject != undefined){
     modules.removeChild(currentProject.divProject);
     currentProject.ProjectName.style = "background-color: white; color: #d63b3f;";
     currentProject = item;
     modules.appendChild(currentProject.divProject);
     currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
+    }
 }
 
 const addTheItems = (item, projectOrTask, time) => {
+    addDivButton.addEventListener("click", getProjectForm);
     if(projectOrTask == "project"){
         projectList.push(item);
         bottomSidebarDiv.appendChild(item.ProjectName);
@@ -62,33 +69,22 @@ const addTheItems = (item, projectOrTask, time) => {
     else if(projectOrTask == "task"){
         currentProject.addToList(item);
         if(item.today == true){
-            item.duplicated = true;
+            item.makeDuplicatedTrue();
             let placeholder = addToToday(item, time);
             today.addToList(placeholder);
             let placeholderTwo = addToWeek(item, time);
             week.addToList(placeholderTwo);
-            let placeholderThree = addToInbox(item, time);
-            inbox.addToList(placeholderThree);
+
         }
-        else if(item.week == true){
-            item.duplicated = true;
+        else if(item.thisWeek == true){
+            item.makeDuplicatedTrue();
             let placeholder = addToWeek(item, time);
             week.addToList(placeholder);
-            let placeholderTwo = addToInbox(item, time);
-            inbox.addToList(placeholderTwo);
-        }
-        else if(currentProject == inbox){
-            currentProject.removeFromList(item);
-            let placeholder = toDoItem(item.title, time , item.priority, item.description);
-            inbox.addToList(placeholder);
-        }
-        else{
-            item.duplicated = true;
-            console.log(item)
-            let placeholder = addToInbox(item, time);
-            inbox.addToList(placeholder);
         }
 
     }
 }
-export {addTheItems, currentProject, today, week};
+const removeItem = () => {
+    
+}
+export {addTheItems, currentProject, today, week, projectList};
