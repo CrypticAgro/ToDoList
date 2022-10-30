@@ -1,5 +1,6 @@
 import "./project.css";
 import { format } from "date-fns";
+import { removeItem } from ".";
 
 export const project = (name) => {
     const addToList = (itemToAdd) => {
@@ -22,10 +23,16 @@ export const project = (name) => {
     ProjectName.innerText = name;
     ProjectName.className = "project-names";
 
+    let deleteButton = document.createElement("div")
+
+    deleteButton.innerText = "remove";
+    deleteButton.id = "project-delete-button";
+    deleteButton.addEventListener("click", (e) => removeItem("project", e));
+
     divAdd.id = "project-add";
     divProject.id = "project";
 
     divProject.appendChild(divAdd);
 
-    return{ addToList, removeFromList, divProject, ProjectName, toDoList, name };
+    return{ addToList, removeFromList, divProject, ProjectName, toDoList, name, deleteButton };
 }

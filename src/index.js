@@ -63,6 +63,7 @@ const addTheItems = (item, projectOrTask, time) => {
     if(projectOrTask == "project"){
         projectList.push(item);
         bottomSidebarDiv.appendChild(item.ProjectName);
+        bottomSidebarDiv.appendChild(item.deleteButton);
         item.ProjectName.addEventListener("click", (e) => {e.stopPropagation; changeCurrentProject(item)});
 
     }
@@ -84,7 +85,44 @@ const addTheItems = (item, projectOrTask, time) => {
 
     }
 }
-const removeItem = () => {
-    
+const removeItem = (type, e) => {
+    if(type == "form"){
+        body.removeChild(e.target.parentNode);
+        addDivButton.addEventListener("click", getProjectForm);
+    }
+    if(type == "ToDo"){
+        let name = e.target.previousElementSibling.previousElementSibling.innerText;
+        let check = currentProject.toDoList.findIndex(x => x.title == name);
+        check = currentProject.toDoList[check];
+        currentProject.removeFromList(check);
+        let x = today.toDoList.findIndex(x => x.title == check.title);
+
+        switch(x){
+            case -1:
+                break;
+            default:
+                x = today.toDoList[x];
+                today.removeFromList(x);
+                break;
+        }
+
+        let y = week.toDoList.findIndex(x => x.title == check.title);
+        switch(y){
+            case -1:
+                break;
+            default:
+                y = week.toDoList[y];
+                week.removeFromList(y);
+                break;
+        }
+    }
+    if(type == "project"){
+        let name = e.target.previousElementSibling.innerText;
+        let check = projectList.findIndex(x => x.name == name);
+        let check2 = projectList[check];
+        projectList.splice(check, 1);
+        bottomSidebarDiv.removeChild(check2.ProjectName);
+        bottomSidebarDiv.removeChild(e.target);
+    }
 }
-export {addTheItems, currentProject, today, week, projectList};
+export {addTheItems, currentProject, today, week, projectList, removeItem};

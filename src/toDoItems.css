@@ -23,3 +23,9 @@
 #priority{
     color: white;
 }
+#to-do-delete-button{
+    display: flex;
+    justify-content: start;
+    align-items:flex-start;
+    color: white;
+}

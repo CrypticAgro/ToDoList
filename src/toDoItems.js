@@ -1,6 +1,7 @@
 import "./toDoItems.css";
 import {format, formatISO, isSameWeek, isThisWeek, parseISO } from 'date-fns'
 import { checkTheDate } from "./dateCheck";
+import { removeItem } from ".";
 
 export const toDoItem = (title, dueDate, priority, description, changeDate) => {
     let div = document.createElement("div");
@@ -9,13 +10,18 @@ export const toDoItem = (title, dueDate, priority, description, changeDate) => {
     let divPriority = document.createElement("div");
     let divGetDueDate = document.createElement("input");
     let divSubContainer = document.createElement("div");
-
     let date;
     let formattedDate;
     let today;
     let thisWeek;
     let duplicated = false;
 
+    let deleteButton = document.createElement("div")
+
+    deleteButton.innerText = "X";
+    deleteButton.id = "to-do-delete-button";
+    deleteButton.addEventListener("click", (e) => removeItem("ToDo", e));
+    
     divDueDate.id = "due-date";
     div.id = "container";
     divTitle.id = "title";
@@ -94,6 +100,7 @@ export const toDoItem = (title, dueDate, priority, description, changeDate) => {
     div.appendChild(divSubContainer);
     divSubContainer.appendChild(divDueDate);
     divSubContainer.appendChild(divPriority);
+    div.appendChild(deleteButton);
 
     return{title, dueDate, priority, div, formattedDate, description, today, thisWeek, makeDuplicatedTrue, changeTheDate};
 }

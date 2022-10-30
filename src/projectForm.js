@@ -1,12 +1,16 @@
-import { addTheItems, currentProject, projectList } from '.';
+import { addTheItems, currentProject, projectList, removeItem } from '.';
 import './projectForm.css';
 import { project } from './projects';
 import { taskForm } from './taskForm';
 export const projectForm = () => {
     let tempProject;
 
+    let deleteButton = document.createElement("div")
 
-    let body = document.getElementById("body")
+    deleteButton.innerText = "X";
+    deleteButton.id = "form-delete-button";
+    deleteButton.addEventListener("click", (e) => removeItem("form", e));
+    let body = document.getElementById("body");
     let projectForm = document.createElement("form");
     let projectName = document.createElement("input");
     let submit = document.createElement("input");
@@ -29,6 +33,7 @@ export const projectForm = () => {
     formDivs.id = "form-divs";
 
     body.appendChild(projectForm);
+    projectForm.appendChild(deleteButton);
     projectForm.appendChild(projectName);
     projectForm.appendChild(submit);
 

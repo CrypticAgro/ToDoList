@@ -10,21 +10,20 @@
     display: flex;
     justify-content: end;
 }
-#project-button-adder{
-    position: absolute;
-    top: 87%;
-    justify-content: center;
-    background-color: #d63b3f;
-    border: none;
-    border-radius: 100px;
-    color: white;
-    width: 100px;
-    height: 100px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 300%;
-}
 
 .project-names{
+    background-color: #d63b3f;
+    color: white;
     cursor: pointer;
+    display: flex;
+}
+#project-delete-button{
+
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    color: #d63b3f;
+    font-size: 16px;
 }

@@ -1,8 +1,14 @@
-import { addTheItems, currentProject, today, week } from ".";
+import { addTheItems, currentProject, today, week, removeItem } from ".";
 import { projectForm } from "./projectForm";
 import "./taskForm.css";
 import { toDoItem } from "./toDoItems";
 export const taskForm = (task) => {
+    let deleteButton = document.createElement("div")
+
+    deleteButton.innerText = "X";
+    deleteButton.id = "form-delete-button";
+    deleteButton.addEventListener("click", (e) => removeItem("form", e));
+
     let body = document.getElementById("body");
     let form = document.createElement("form");
 
@@ -22,6 +28,7 @@ export const taskForm = (task) => {
     projectDiv.innerText = "Project"
     taskDiv.innerText = "Task"
 
+    form.appendChild(deleteButton);
     formDivs.appendChild(projectDiv);
     formDivs.appendChild(taskDiv);
     form.appendChild(formDivs);
