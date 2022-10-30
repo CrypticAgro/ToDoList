@@ -4,8 +4,6 @@ import { projectForm } from "./projectForm";
 import { toDoItem, makeDuplicatedTrue } from "./toDoItems";
 
 const projectList = [];
-
-
 const sidebar = document.getElementById("sidebar");
 const modules = document.getElementById("modules");
 
@@ -23,9 +21,6 @@ bottomSidebarDivTitle.innerText = "Projects";
 if(currentProject != undefined){
 currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
 modules.appendChild(currentProject.divProject);
-}
-else if(projectList.length != 0){
-    currentProject = projectList[0];
 }
 
 sidebar.appendChild(topSidebarDiv);
@@ -45,20 +40,6 @@ addDivButton.addEventListener("click", getProjectForm);
 addDivButton.id = "project-button-adder";
 sidebar.appendChild(addDivButton);
 
-if (localStorage.length != 0){
-    Object.keys(localStorage).forEach(function(key){
-        projectList.push(JSON.parse(localStorage.getItem(key)));
-        console.log(projectList)
-     });
-    for(let i = 0; i < projectList.length; i++){
-        let project = projectList[i];
-        project.reInitialize();
-        console.log(project)
-        bottomSidebarDiv.appendChild(project.ProjectName)
-        console.log(project)
-    }
-}
-
 const changeCurrentProject = (item) => {
     if (currentProject.divProject != undefined){
     modules.removeChild(currentProject.divProject);
@@ -73,9 +54,6 @@ const addTheItems = (item, projectOrTask, time) => {
     addDivButton.addEventListener("click", getProjectForm);
     if(projectOrTask == "project"){
         projectList.push(item);
-        localStorage.setItem(item.name, JSON.stringify(item));
-        console.log(localStorage)
-        console.log(JSON.parse(localStorage.getItem(item.name)))
         if(currentProject == undefined || currentProject == ""){
             modules.appendChild(item.divProject);
             currentProject = item;
@@ -88,10 +66,6 @@ const addTheItems = (item, projectOrTask, time) => {
     }
     else if(projectOrTask == "task"){
         currentProject.addToList(item);
-
-        localStorage.setItem(currentProject.name, JSON.stringify(currentProject));
-        console.log(localStorage)
-        console.log(JSON.parse(localStorage.getItem(currentProject.name)))
     }
 }
 const removeItem = (type, e) => {
@@ -102,7 +76,6 @@ const removeItem = (type, e) => {
     if(type == "ToDo"){
         let name = e.target.previousElementSibling.previousElementSibling.innerText;
         let check = currentProject.toDoList.findIndex(x => x.title == name);
-        localStorage.removeItem(currentProject.toDoList[check]);
         check = currentProject.toDoList[check];
         currentProject.removeFromList(check);
 
@@ -112,7 +85,6 @@ const removeItem = (type, e) => {
         let check = projectList.findIndex(x => x.name == name);
         let check2 = projectList[check];
         projectList.splice(check, 1);
-        localStorage.removeItem(check2.name);
         if(check2 == currentProject){
             modules.removeChild(currentProject.divProject);
             currentProject = undefined;

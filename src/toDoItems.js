@@ -53,9 +53,6 @@ export const toDoItem = (title, dueDate, priority, description) => {
     divSubContainer.appendChild(divPriority);
     div.appendChild(deleteButton);
 
-    const reInitialize = () => {
-
-    }
 
     return{title, dueDate, priority, div, formattedDate, description, reInitialize};
 }
