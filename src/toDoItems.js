@@ -1,8 +1,8 @@
 import "./toDoItems.css";
 import {format, formatISO, isSameWeek, isThisWeek, parseISO } from 'date-fns'
-import { removeItem } from ".";
+import { currentProject, removeItem } from ".";
 
-export const toDoItem = (title, dueDate, priority, description) => {
+export const toDoItem = (title, dueDate, priority, description, parentProjectName) => {
     let div = document.createElement("div");
     let divTitle = document.createElement("h2");
     let divDueDate = document.createElement("div");
@@ -23,14 +23,27 @@ export const toDoItem = (title, dueDate, priority, description) => {
     divTitle.id = "title";
     divSubContainer.id = "subcontainer";
     divPriority.id = "priority";
+
+    if(dueDate != ""){
+        divDueDate.innerText = dueDate;
+    }
+    else{
     divDueDate.innerText = "date";
+    }
 
     const getTheDate = () => {
         let placeholder = parseISO(divGetDueDate.value);
         divGetDueDate.value = "";
         formattedDate = format(placeholder, "MM/dd/yyyy");
         divDueDate.innerText = formattedDate;
+        dueDate = formattedDate;
+        placeholder = (JSON.parse(localStorage.getItem(currentProject.name + "ToDoList")));
+        let index = currentProject.toDoList.findIndex(x => x.title = title)
+        index = currentProject.toDoList[index];
+        index.dueDate = dueDate;
+        localStorage.setItem(currentProject.name + "ToDoList", JSON.stringify(currentProject.toDoList));
         divDueDate.addEventListener('click', addGetDueDate);
+
     }
 
     const addGetDueDate = () => {
@@ -54,5 +67,5 @@ export const toDoItem = (title, dueDate, priority, description) => {
     div.appendChild(deleteButton);
 
 
-    return{title, dueDate, priority, div, formattedDate, description, reInitialize};
+    return{title, dueDate, priority, div, formattedDate, description, parentProjectName};
 }
