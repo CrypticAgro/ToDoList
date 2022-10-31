@@ -1,20 +1,16 @@
 import "./toDoItems.css";
 import {format, formatISO, isSameWeek, isThisWeek, parseISO } from 'date-fns'
-import { checkTheDate } from "./dateCheck";
-import { removeItem } from ".";
+import { currentProject, removeItem } from ".";
 
-export const toDoItem = (title, dueDate, priority, description, changeDate) => {
+export const toDoItem = (title, dueDate, priority, description, parentProjectName) => {
     let div = document.createElement("div");
     let divTitle = document.createElement("h2");
     let divDueDate = document.createElement("div");
     let divPriority = document.createElement("div");
     let divGetDueDate = document.createElement("input");
     let divSubContainer = document.createElement("div");
-    let date;
     let formattedDate;
-    let today;
-    let thisWeek;
-    let duplicated = false;
+
 
     let deleteButton = document.createElement("div")
 
@@ -28,42 +24,25 @@ export const toDoItem = (title, dueDate, priority, description, changeDate) => {
     divSubContainer.id = "subcontainer";
     divPriority.id = "priority";
 
-    const todayWeekDetermine = (changeDate) => {
-        if(format(parseISO(changeDate), "MM/dd/yyyy") == format(new Date(), "MM/dd/yyyy")){
-            today = true;
-        }
-        else{
-            today = false;
-        }
-        if(isSameWeek(new Date(), new Date(formattedDate))){
-            thisWeek = true;
-        }
-        else{
-            thisWeek = false;
-        }        
+    if(dueDate != ""){
+        divDueDate.innerText = dueDate;
     }
-
-    const makeDuplicatedTrue = () => {
-        duplicated = true;
-    }
-    
-    const changeTheDate = (newDate) => {
-        divGetDueDate.value = "";
-        formattedDate = newDate;
-        divDueDate.innerText = formattedDate;
+    else{
+    divDueDate.innerText = "date";
     }
 
     const getTheDate = () => {
-        let holdThis = divGetDueDate.value;
-        date = divGetDueDate.value;
         let placeholder = parseISO(divGetDueDate.value);
         divGetDueDate.value = "";
         formattedDate = format(placeholder, "MM/dd/yyyy");
         divDueDate.innerText = formattedDate;
+        dueDate = formattedDate;
+        placeholder = (JSON.parse(localStorage.getItem(currentProject.name + "ToDoList")));
+        let index = currentProject.toDoList.findIndex(x => x.title = title)
+        index = currentProject.toDoList[index];
+        index.dueDate = dueDate;
+        localStorage.setItem(currentProject.name + "ToDoList", JSON.stringify(currentProject.toDoList));
         divDueDate.addEventListener('click', addGetDueDate);
-        todayWeekDetermine(holdThis);
-
-        checkTheDate(formattedDate, today, thisWeek, title, date);
 
     }
 
@@ -73,26 +52,11 @@ export const toDoItem = (title, dueDate, priority, description, changeDate) => {
         divDueDate.appendChild(divGetDueDate);
     }
     
-    if(changeDate == undefined || changeDate == true){
-    divGetDueDate.addEventListener('input', getTheDate)
-    divDueDate.addEventListener('click', addGetDueDate)
-    }
+    divGetDueDate.addEventListener('input', getTheDate);
+    divDueDate.addEventListener('click', addGetDueDate);
 
     divGetDueDate.type = "date";
     divTitle.innerText = title;
-
-    if (dueDate == undefined || dueDate == ""){
-        divDueDate.innerText = "date";
-        today = false;
-        thisWeek = false;
-    }
-
-    else{
-        let placeholder = parseISO(dueDate);
-        formattedDate = format(placeholder, "MM/dd/yyyy");
-        divDueDate.innerText = formattedDate;
-        todayWeekDetermine(dueDate);
-    }
 
     divPriority.innerText = priority;
 
@@ -102,5 +66,6 @@ export const toDoItem = (title, dueDate, priority, description, changeDate) => {
     divSubContainer.appendChild(divPriority);
     div.appendChild(deleteButton);
 
-    return{title, dueDate, priority, div, formattedDate, description, today, thisWeek, makeDuplicatedTrue, changeTheDate};
+
+    return{title, dueDate, priority, div, formattedDate, description, parentProjectName};
 }

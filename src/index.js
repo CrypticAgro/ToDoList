@@ -1,36 +1,26 @@
 import { project } from "./projects";
 import { taskForm } from "./taskForm";
 import { projectForm } from "./projectForm";
-import { addToToday, addToWeek } from "./dateCheck";
 import { toDoItem, makeDuplicatedTrue } from "./toDoItems";
 
 const projectList = [];
+
+
 const sidebar = document.getElementById("sidebar");
 const modules = document.getElementById("modules");
-let today = project("Today");
-let week = project("This week");
 
-projectList.push(today);
-projectList.push(week);
-
-today.ProjectName.addEventListener("click", () => changeCurrentProject(today));
-week.ProjectName.addEventListener("click", () => changeCurrentProject(week));
 
 let topSidebarDiv = document.createElement("div");
 let addDivButton = document.createElement("button");
-let currentProject = today;
+
+let currentProject;
 
 let bottomSidebarDivTitle = document.createElement("div");
 let bottomSidebarDiv = document.createElement("div");
 
 bottomSidebarDivTitle.innerText = "Projects";
 
-currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
 
-topSidebarDiv.appendChild(today.ProjectName);
-topSidebarDiv.appendChild(week.ProjectName);
-
-modules.appendChild(currentProject.divProject);
 sidebar.appendChild(topSidebarDiv);
 sidebar.appendChild(bottomSidebarDivTitle);
 sidebar.appendChild(bottomSidebarDiv);
@@ -48,6 +38,45 @@ addDivButton.addEventListener("click", getProjectForm);
 addDivButton.id = "project-button-adder";
 sidebar.appendChild(addDivButton);
 
+if (localStorage.length != 0){
+    let tempList = [];
+    Object.keys(localStorage).forEach(function(key){
+        tempList.push(JSON.parse(localStorage.getItem(key)));
+     });
+    for(let i = 0; i < tempList.length; i++){
+        if(typeof tempList[i] == "object" && tempList[i].name != undefined){
+            let tempProject = tempList[i];
+            let placeholder = project(tempProject.name);
+            projectList.push(placeholder);
+            bottomSidebarDiv.appendChild(placeholder.ProjectName);
+            bottomSidebarDiv.appendChild(placeholder.deleteButton);
+            placeholder.ProjectName.addEventListener("click", (e) => {e.stopPropagation; changeCurrentProject(placeholder)});
+        }
+    }
+    for(let i = 0; i < tempList.length; i++){
+        if(Array.isArray(tempList[i])){
+            let tempToDoList = tempList[i]
+            for(let i = 0; i < tempToDoList.length; i++){
+                let temp = tempToDoList[i];
+                let projectParent = projectList.findIndex(x => x.name == temp.parentProjectName);
+                projectParent = projectList[projectParent];
+                let tempToDo = toDoItem(temp.title, temp.dueDate, temp.priority, temp.description, temp.parentProjectName);
+                projectParent.addToList(tempToDo);
+            }
+        }
+    }
+}
+
+if(currentProject != undefined){
+    currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
+    modules.appendChild(currentProject.divProject);
+    }
+else if(projectList.length != 0){
+        currentProject = projectList[0];
+        currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
+        modules.appendChild(currentProject.divProject);
+}
+
 const changeCurrentProject = (item) => {
     if (currentProject.divProject != undefined){
     modules.removeChild(currentProject.divProject);
@@ -62,27 +91,21 @@ const addTheItems = (item, projectOrTask, time) => {
     addDivButton.addEventListener("click", getProjectForm);
     if(projectOrTask == "project"){
         projectList.push(item);
+        localStorage.setItem(item.name, JSON.stringify(item));
+        if(currentProject == undefined || currentProject == ""){
+            modules.appendChild(item.divProject);
+            currentProject = item;
+            currentProject.ProjectName.style = "background-color: #d63b3f; color:white;";
+        }
         bottomSidebarDiv.appendChild(item.ProjectName);
         bottomSidebarDiv.appendChild(item.deleteButton);
         item.ProjectName.addEventListener("click", (e) => {e.stopPropagation; changeCurrentProject(item)});
 
     }
     else if(projectOrTask == "task"){
+        item.parentProjectName = currentProject.name;
         currentProject.addToList(item);
-        if(item.today == true){
-            item.makeDuplicatedTrue();
-            let placeholder = addToToday(item, time);
-            today.addToList(placeholder);
-            let placeholderTwo = addToWeek(item, time);
-            week.addToList(placeholderTwo);
-
-        }
-        else if(item.thisWeek == true){
-            item.makeDuplicatedTrue();
-            let placeholder = addToWeek(item, time);
-            week.addToList(placeholder);
-        }
-
+        localStorage.setItem(currentProject.name + "ToDoList", JSON.stringify(currentProject.toDoList));
     }
 }
 const removeItem = (type, e) => {
@@ -95,34 +118,21 @@ const removeItem = (type, e) => {
         let check = currentProject.toDoList.findIndex(x => x.title == name);
         check = currentProject.toDoList[check];
         currentProject.removeFromList(check);
-        let x = today.toDoList.findIndex(x => x.title == check.title);
-
-        switch(x){
-            case -1:
-                break;
-            default:
-                x = today.toDoList[x];
-                today.removeFromList(x);
-                break;
-        }
-
-        let y = week.toDoList.findIndex(x => x.title == check.title);
-        switch(y){
-            case -1:
-                break;
-            default:
-                y = week.toDoList[y];
-                week.removeFromList(y);
-                break;
-        }
+        localStorage.setItem(currentProject.name + "ToDoList", JSON.stringify(currentProject.toDoList));
     }
     if(type == "project"){
         let name = e.target.previousElementSibling.innerText;
         let check = projectList.findIndex(x => x.name == name);
         let check2 = projectList[check];
         projectList.splice(check, 1);
+        if(check2 == currentProject){
+            modules.removeChild(currentProject.divProject);
+            currentProject = undefined;
+        }
         bottomSidebarDiv.removeChild(check2.ProjectName);
         bottomSidebarDiv.removeChild(e.target);
+        localStorage.removeItem(check2.name);
+        localStorage.removeItem(check2.name+"ToDoList");
     }
 }
-export {addTheItems, currentProject, today, week, projectList, removeItem};
+export {addTheItems, currentProject, projectList, removeItem};

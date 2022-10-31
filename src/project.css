@@ -12,13 +12,12 @@
 }
 
 .project-names{
-    background-color: #d63b3f;
-    color: white;
+    color: #d63b3f;
     cursor: pointer;
     display: flex;
 }
 #project-delete-button{
-
+    cursor: pointer;
     background-color: white;
     display: flex;
     justify-content: center;
